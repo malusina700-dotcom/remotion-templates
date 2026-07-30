@@ -12,7 +12,9 @@ const scene = z.object({
   id: z.string().min(1),
   kind: z.enum(["hero", "points", "equation", "video-window", "cta", "custom"]),
   content: z.record(z.string(), z.unknown()),
-  timing: z.object({ durationMs: z.number().int().positive().optional() }).optional(),
+  timing: z
+    .object({ durationMs: z.number().int().positive().optional() })
+    .optional(),
 });
 
 export const VideoSpecSchema = z.object({
@@ -30,17 +32,30 @@ export const VideoSpecSchema = z.object({
     durationMode: z.enum(["auto", "fixed"]).default("auto"),
     fixedDurationSec: z.number().positive().optional(),
   }),
-  style: z.object({
-    theme: z.string().default("default"),
-    variant: z.string().default("default"),
-    safeAreaProfile: z.enum(["baseline", "metaSafe"]).default("baseline"),
-  }).default({ theme: "default", variant: "default", safeAreaProfile: "baseline" }),
-  audio: z.object({
-    narrationSrc: z.string().optional(),
-    musicSrc: z.string().optional(),
-    ducking: z.boolean().default(true),
-  }).default({ ducking: true }),
-  assets: z.object({ logoSrc: z.string().optional(), posterSrc: z.string().optional() }).default({}),
+  style: z
+    .object({
+      theme: z.string().default("default"),
+      variant: z.string().default("default"),
+      safeAreaProfile: z.enum(["baseline", "metaSafe"]).default("baseline"),
+    })
+    .default({
+      theme: "default",
+      variant: "default",
+      safeAreaProfile: "baseline",
+    }),
+  audio: z
+    .object({
+      narrationSrc: z.string().optional(),
+      musicSrc: z.string().optional(),
+      ducking: z.boolean().default(true),
+    })
+    .default({ ducking: true }),
+  assets: z
+    .object({
+      logoSrc: z.string().optional(),
+      posterSrc: z.string().optional(),
+    })
+    .default({}),
   scenes: z.array(scene).min(1),
 });
 
@@ -53,14 +68,25 @@ export function dimensions(aspect: VideoSpec["target"]["aspect"]) {
 }
 
 export function compositionId(spec: VideoSpec): string {
-  const suffix = spec.target.aspect === "9:16" ? "Vertical" : spec.target.aspect === "4:5" ? "Portrait" : "Square";
+  const suffix =
+    spec.target.aspect === "9:16"
+      ? "Vertical"
+      : spec.target.aspect === "4:5"
+        ? "Portrait"
+        : "Square";
   return `EclatTemplate${suffix}`;
 }
 
 export function durationInFrames(spec: VideoSpec): number {
   if (spec.target.durationMode === "fixed" && spec.target.fixedDurationSec) {
-    return Math.max(1, Math.round(spec.target.fixedDurationSec * spec.target.fps));
+    return Math.max(
+      1,
+      Math.round(spec.target.fixedDurationSec * spec.target.fps),
+    );
   }
-  const milliseconds = spec.scenes.reduce((sum, item) => sum + (item.timing?.durationMs ?? 3000), 0);
+  const milliseconds = spec.scenes.reduce(
+    (sum, item) => sum + (item.timing?.durationMs ?? 3000),
+    0,
+  );
   return Math.max(1, Math.round((milliseconds / 1000) * spec.target.fps));
 }

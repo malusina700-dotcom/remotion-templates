@@ -2,15 +2,51 @@
   "schemaVersion": "1.0",
   "id": "pythagoras-proof-walkthrough",
   "templateFamily": "proof-walkthrough",
-  "meta": { "title": "Why the Pythagorean theorem works", "tags": ["maths", "proof"] },
+  "meta": {
+    "title": "Why the Pythagorean theorem works",
+    "tags": ["maths", "proof"]
+  },
   "target": { "aspect": "9:16", "fps": 30, "durationMode": "auto" },
-  "style": { "theme": "default", "variant": "default", "safeAreaProfile": "metaSafe" },
+  "style": {
+    "theme": "default",
+    "variant": "default",
+    "safeAreaProfile": "metaSafe"
+  },
   "audio": { "ducking": true },
   "assets": {},
   "scenes": [
-    { "id": "hero", "kind": "hero", "content": { "title": "Why does a² + b² = c²?", "subtitle": "A visual area proof" } },
-    { "id": "equation", "kind": "equation", "content": { "title": "Compare the same square two ways", "latexBlocks": ["(a+b)^2 = a^2 + 2ab + b^2", "(a+b)^2 = 4(ab/2) + c^2"] } },
-    { "id": "takeaway", "kind": "points", "content": { "title": "Cancel the shared area", "points": ["Both layouts fill the same outer square", "The four triangles have equal area", "The area left over must be equal"] } },
-    { "id": "cta", "kind": "cta", "content": { "line1": "Now try the proof from memory" } }
+    {
+      "id": "hero",
+      "kind": "hero",
+      "content": {
+        "title": "Why does a² + b² = c²?",
+        "subtitle": "A visual area proof"
+      }
+    },
+    {
+      "id": "equation",
+      "kind": "equation",
+      "content": {
+        "title": "Compare the same square two ways",
+        "latexBlocks": ["(a+b)^2 = a^2 + 2ab + b^2", "(a+b)^2 = 4(ab/2) + c^2"]
+      }
+    },
+    {
+      "id": "takeaway",
+      "kind": "points",
+      "content": {
+        "title": "Cancel the shared area",
+        "points": [
+          "Both layouts fill the same outer square",
+          "The four triangles have equal area",
+          "The area left over must be equal"
+        ]
+      }
+    },
+    {
+      "id": "cta",
+      "kind": "cta",
+      "content": { "line1": "Now try the proof from memory" }
+    }
   ]
 }

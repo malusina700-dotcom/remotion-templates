@@ -1,6 +1,10 @@
 import example from "../examples/proof-walkthrough.video.json";
 import { describe, expect, it } from "vitest";
-import { compositionId, durationInFrames, VideoSpecSchema } from "../src/schema";
+import {
+  compositionId,
+  durationInFrames,
+  VideoSpecSchema,
+} from "../src/schema";
 
 describe("VideoSpec", () => {
   it("parses the included example", () => {

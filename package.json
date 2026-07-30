@@ -5,12 +5,16 @@
   "type": "module",
   "description": "Open-source, agent-friendly Remotion templates driven by a portable VideoSpec.",
   "license": "MIT",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "video:scaffold": "tsx scripts/scaffold.ts",
     "video:validate": "tsx scripts/validate.ts",
     "video:preview": "tsx scripts/preview.ts",
     "video:render": "tsx scripts/render.ts",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
@@ -24,6 +28,7 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
+    "prettier": "^3.6.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.0",
     "vitest": "^3.2.4"
