@@ -52,8 +52,8 @@ function Scene({
   return (
     <AbsoluteFill
       style={{
-        background: "#071526",
-        color: "#f8fafc",
+        background: "#161416",
+        color: "#f7eee8",
         padding: "9%",
         justifyContent: "center",
         fontFamily: "Arial, sans-serif",
@@ -87,7 +87,7 @@ function Scene({
           style={{
             fontSize: 38,
             lineHeight: 1.3,
-            color: "#cbd5e1",
+            color: "#d8c9bf",
             marginTop: 28,
           }}
         >
@@ -117,7 +117,7 @@ function Scene({
               key={equation}
               style={{
                 fontSize: 40,
-                background: "#0f2742",
+                background: "#2a2527",
                 padding: 24,
                 borderRadius: 18,
               }}
@@ -144,7 +144,7 @@ function Scene({
           />
         </div>
       ) : scene.kind === "video-window" ? (
-        <div style={{ marginTop: 48, fontSize: 28, color: "#cbd5e1" }}>
+        <div style={{ marginTop: 48, fontSize: 28, color: "#d8c9bf" }}>
           Add a source video under public/ and set content.src.
         </div>
       ) : null}
@@ -155,10 +155,10 @@ function Scene({
 export function TemplateVideo({ spec }: { spec: VideoSpec }) {
   const accent =
     spec.templateFamily === "finance-brief"
-      ? "#f59e0b"
+      ? "#e3c6b1"
       : spec.templateFamily === "proof-walkthrough"
-        ? "#a78bfa"
-        : "#38bdf8";
+        ? "#c2a68f"
+        : "#d0b49f";
   const { fps } = useVideoConfig();
   let cursor = 0;
   return (

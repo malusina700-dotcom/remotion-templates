@@ -1,6 +1,6 @@
 {
-  "name": "eclat-remotion-templates",
-  "version": "0.1.0",
+  "name": "instavar-remotion-templates",
+  "version": "0.2.0",
   "private": false,
   "type": "module",
   "description": "Open-source, agent-friendly Remotion templates driven by a portable VideoSpec.",

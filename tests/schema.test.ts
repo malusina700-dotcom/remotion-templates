@@ -9,7 +9,7 @@ import {
 describe("VideoSpec", () => {
   it("parses the included example", () => {
     const spec = VideoSpecSchema.parse(example);
-    expect(compositionId(spec)).toBe("EclatTemplateVertical");
+    expect(compositionId(spec)).toBe("InstavarTemplateVertical");
     expect(durationInFrames(spec)).toBe(360);
   });
 });

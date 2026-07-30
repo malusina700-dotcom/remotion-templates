@@ -74,7 +74,7 @@ export function compositionId(spec: VideoSpec): string {
       : spec.target.aspect === "4:5"
         ? "Portrait"
         : "Square";
-  return `EclatTemplate${suffix}`;
+  return `InstavarTemplate${suffix}`;
 }
 
 export function durationInFrames(spec: VideoSpec): number {

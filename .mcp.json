@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "eclat-remotion": {
+    "instavar-remotion": {
       "type": "http",
-      "url": "https://mcp.eclatinstitute.sg/video"
+      "url": "https://instavar.com/api/mcp/templates"
     }
   }
 }

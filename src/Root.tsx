@@ -36,7 +36,7 @@ export function RemotionRoot() {
         return (
           <Composition
             key={suffix}
-            id={`EclatTemplate${suffix}`}
+            id={`InstavarTemplate${suffix}`}
             component={TemplateVideo}
             width={size.width}
             height={size.height}

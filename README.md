@@ -1,16 +1,16 @@
-# Eclat Remotion Templates
+# Instavar Remotion Templates
 
-Open-source, agent-friendly Remotion templates for turning a brief into a validated local video. The creative work happens in your Codex or Claude Code conversation. The Eclat MCP server supplies public template contracts, examples, and troubleshooting without requiring an Eclat API key.
+Open-source, agent-friendly Remotion templates for turning a brief into a validated local video. The creative work happens in your Codex or Claude Code conversation. The Instavar MCP server supplies public template contracts, examples, and troubleshooting without requiring an Instavar account or API key.
 
-[Open in Codex](codex://new?prompt=Clone%20https%3A%2F%2Fgithub.com%2Fcheeweijie%2Feclat-remotion-templates.git%20into%20a%20new%20local%20folder.%20Read%20AGENTS.md%20and%20.agents%2Fskills%2Fmake-video%2FSKILL.md.%20Add%20the%20public%20MCP%20server%20with%20codex%20mcp%20add%20eclat-remotion%20--url%20https%3A%2F%2Fmcp.eclatinstitute.sg%2Fvideo.%20Then%20ask%20me%20for%20my%20video%20brief%2C%20choose%20a%20template%2C%20create%20a%20VideoSpec%2C%20validate%20it%2C%20preview%20it%2C%20and%20render%20the%20MP4%20locally.)
+[Open in Codex](codex://new?prompt=Clone%20https%3A%2F%2Fgithub.com%2Finstavar%2Fremotion-templates.git%20into%20a%20new%20local%20folder.%20Read%20AGENTS.md%20and%20.agents%2Fskills%2Fmake-video%2FSKILL.md.%20Add%20the%20public%20MCP%20server%20with%20codex%20mcp%20add%20instavar-remotion%20--url%20https%3A%2F%2Finstavar.com%2Fapi%2Fmcp%2Ftemplates.%20Then%20ask%20me%20for%20my%20video%20brief%2C%20choose%20a%20template%2C%20create%20a%20VideoSpec%2C%20validate%20it%2C%20preview%20it%2C%20and%20render%20the%20MP4%20locally.)
 
 If your browser blocks the app link, run:
 
 ```bash
-git clone https://github.com/cheeweijie/eclat-remotion-templates.git
-cd eclat-remotion-templates
+git clone https://github.com/instavar/remotion-templates.git
+cd remotion-templates
 npm install
-codex mcp add eclat-remotion --url https://mcp.eclatinstitute.sg/video
+codex mcp add instavar-remotion --url https://instavar.com/api/mcp/templates
 codex
 ```
 
@@ -19,10 +19,10 @@ Then ask Codex to read `AGENTS.md` and make a video.
 ## Claude Code
 
 ```bash
-git clone https://github.com/cheeweijie/eclat-remotion-templates.git
-cd eclat-remotion-templates
+git clone https://github.com/instavar/remotion-templates.git
+cd remotion-templates
 npm install
-claude mcp add --transport http eclat-remotion https://mcp.eclatinstitute.sg/video
+claude mcp add --transport http instavar-remotion https://instavar.com/api/mcp/templates
 claude
 ```
 
@@ -59,11 +59,13 @@ All five support `9:16`, `4:5`, and `1:1` output. The first public release inten
 
 ## Privacy and keys
 
-No Eclat account or API key is needed. The public MCP tools are read-only and deterministic. Your brief and local assets remain in your own agent conversation and workspace. Rendering runs on your machine.
+No Instavar account or API key is needed. The public MCP tools are read-only and deterministic. Your brief and local assets remain in your own agent conversation and workspace. Rendering runs on your machine.
+
+An Instavar API key unlocks the hosted Studio workflow, including managed rendering, storage, review, publishing, and metrics through [`@instavar/mcp-server`](https://github.com/instavar/mcp-server). The free local path remains available without a key.
 
 ## Licensing
 
-Eclat-authored code in this repository is MIT licensed. Remotion has its own license and terms. Review the [current Remotion license](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md) for your use case. See [TRADEMARKS.md](./TRADEMARKS.md) before using Eclat names or marks.
+Instavar-authored code in this repository is MIT licensed. Remotion has its own license and terms. Review the [current Remotion license](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md) for your use case. See [TRADEMARKS.md](./TRADEMARKS.md) before using Instavar names or marks.
 
 ## Contributing and security
 

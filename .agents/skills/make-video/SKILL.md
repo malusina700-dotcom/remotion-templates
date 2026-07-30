@@ -1,11 +1,11 @@
 ---
 name: make-video
-description: Create, validate, preview, and render a local video with the Eclat Remotion templates and VideoSpec.
+description: Create, validate, preview, and render a local video with the Instavar Remotion templates and VideoSpec.
 ---
 
 # Make a video
 
-1. If the `eclat-remotion` MCP server is connected, call `get_capabilities`, `list_templates`, and `get_template`. Otherwise use the template list in the README.
+1. If the `instavar-remotion` MCP server is connected, call `get_capabilities`, `list_templates`, and `get_template`. Otherwise use the template list in the README.
 2. Ask for any missing brief details that materially affect the result: audience, goal, platform, aspect ratio, duration, source media, and call to action.
 3. Create or scaffold a `*.video.json` VideoSpec. Use only published template and scene identifiers. Write the creative copy from the user's brief. Do not treat placeholder copy as finished content.
 4. Run `npm run video:validate -- <spec>` and fix every blocking error.
