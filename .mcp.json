@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "eclat-remotion": {
+      "type": "http",
+      "url": "https://mcp.eclatinstitute.sg/video"
+    }
+  }
+}

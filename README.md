@@ -26,7 +26,10 @@ claude mcp add --transport http eclat-remotion https://mcp.eclatinstitute.sg/vid
 claude
 ```
 
-Then ask Claude Code to read `CLAUDE.md` and make a video. A direct custom connector does not require publication in Anthropic's connector directory.
+The repository also includes the same server in `.mcp.json`, so Claude Code can
+offer to enable it when the project is trusted. Then ask Claude Code to read
+`CLAUDE.md` and make a video. A direct custom connector does not require
+publication in Anthropic's connector directory.
 
 ## Manual workflow
 
