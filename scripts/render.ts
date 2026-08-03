@@ -1,8 +1,15 @@
 import path from "node:path";
 
+import { evaluateSpec } from "../src/quality";
+import { inspectRenderedMedia } from "./media-qa";
 import { compositionId, loadSpec, runRemotion, writeProps } from "./shared";
 
 const { spec } = await loadSpec(process.argv[2]);
+const issues = evaluateSpec(spec);
+for (const issue of issues) {
+  console.log(`${issue.level.toUpperCase()} [${issue.code}] ${issue.message}`);
+}
+if (issues.some((issue) => issue.level === "error")) process.exit(1);
 const propsPath = await writeProps(spec);
 const output = path.resolve(
   process.argv[3] ?? path.join("out", `${spec.id}.mp4`),
@@ -15,4 +22,7 @@ runRemotion([
   "--props",
   propsPath,
 ]);
-console.log(`Rendered: ${output}`);
+const qa = inspectRenderedMedia(output, spec);
+console.log(qa.summary);
+if (!qa.passed) process.exit(1);
+console.log(`Rendered and verified: ${output}`);

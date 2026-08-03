@@ -1,5 +1,44 @@
+import { mkdir } from "node:fs/promises";
+import path from "node:path";
+
+import { evaluateSpec } from "../src/quality";
 import { loadSpec, runRemotion, writeProps } from "./shared";
 
 const { spec } = await loadSpec(process.argv[2]);
+const issues = evaluateSpec(spec);
+for (const issue of issues) {
+  console.log(`${issue.level.toUpperCase()} [${issue.code}] ${issue.message}`);
+}
+if (issues.some((issue) => issue.level === "error")) process.exit(1);
+
 const propsPath = await writeProps(spec);
-runRemotion(["studio", "src/index.ts", "--props", propsPath]);
+if (process.argv.includes("--studio")) {
+  runRemotion(["studio", "src/index.ts", "--props", propsPath]);
+} else {
+  const directory = path.resolve("out", "previews", spec.id);
+  await mkdir(directory, { recursive: true });
+  let cursor = 0;
+  for (const [index, scene] of spec.scenes.entries()) {
+    const frames = Math.max(
+      1,
+      Math.round(((scene.timing?.durationMs ?? 3000) / 1000) * spec.target.fps),
+    );
+    const midpoint = cursor + Math.floor(frames / 2);
+    const output = path.join(
+      directory,
+      `${String(index + 1).padStart(2, "0")}-${scene.id}.png`,
+    );
+    runRemotion([
+      "still",
+      "src/index.ts",
+      `InstavarTemplate${spec.target.aspect === "9:16" ? "Vertical" : spec.target.aspect === "4:5" ? "Portrait" : "Square"}`,
+      output,
+      "--frame",
+      String(midpoint),
+      "--props",
+      propsPath,
+    ]);
+    cursor += frames;
+  }
+  console.log(`Previewed every scene: ${directory}`);
+}

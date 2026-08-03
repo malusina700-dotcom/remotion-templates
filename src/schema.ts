@@ -8,9 +8,20 @@ export const templateIds = [
   "finance-brief",
 ] as const;
 
+export const sceneKinds = [
+  "hero",
+  "statement",
+  "mechanism",
+  "points",
+  "equation",
+  "video-window",
+  "cta",
+  "custom",
+] as const;
+
 const scene = z.object({
   id: z.string().min(1),
-  kind: z.enum(["hero", "points", "equation", "video-window", "cta", "custom"]),
+  kind: z.enum(sceneKinds),
   content: z.record(z.string(), z.unknown()),
   timing: z
     .object({ durationMs: z.number().int().positive().optional() })
@@ -34,22 +45,35 @@ export const VideoSpecSchema = z.object({
   }),
   style: z
     .object({
-      theme: z.string().default("default"),
+      theme: z
+        .enum(["default", "editorial-light", "editorial-dark", "clinical"])
+        .default("default"),
       variant: z.string().default("default"),
       safeAreaProfile: z.enum(["baseline", "metaSafe"]).default("baseline"),
+      showSceneLabels: z.boolean().default(false),
     })
     .default({
       theme: "default",
       variant: "default",
       safeAreaProfile: "baseline",
+      showSceneLabels: false,
     }),
   audio: z
     .object({
+      mode: z.enum(["auto", "narration", "music", "silent"]).default("auto"),
+      narrationText: z.string().optional(),
       narrationSrc: z.string().optional(),
+      narrationVolume: z.number().min(0).max(1).default(1),
       musicSrc: z.string().optional(),
+      musicVolume: z.number().min(0).max(1).default(0.16),
       ducking: z.boolean().default(true),
     })
-    .default({ ducking: true }),
+    .default({
+      mode: "auto",
+      narrationVolume: 1,
+      musicVolume: 0.16,
+      ducking: true,
+    }),
   assets: z
     .object({
       logoSrc: z.string().optional(),
@@ -89,4 +113,11 @@ export function durationInFrames(spec: VideoSpec): number {
     0,
   );
   return Math.max(1, Math.round((milliseconds / 1000) * spec.target.fps));
+}
+
+export function expectsAudibleAudio(spec: VideoSpec): boolean {
+  if (spec.audio.mode === "silent") return false;
+  if (spec.audio.mode === "narration") return true;
+  if (spec.audio.mode === "music") return true;
+  return Boolean(spec.audio.narrationSrc || spec.audio.musicSrc);
 }

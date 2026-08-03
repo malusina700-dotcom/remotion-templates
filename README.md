@@ -41,10 +41,66 @@ npm run video:render -- examples/proof-walkthrough.video.json
 
 Rendered videos go to `out/` by default.
 
+`video:preview` renders one midpoint frame for every scene into
+`out/previews/<video-id>/`. This makes visual review possible in headless agent
+environments. Add `--studio` to open Remotion Studio instead.
+
 Create a starter spec:
 
 ```bash
 npm run video:scaffold -- proof-walkthrough "Why this equation works"
+```
+
+## Audio without an API key
+
+Audio intent is explicit. Set `audio.mode` to `narration`, `music`, or `silent`.
+Do not rely on the presence of an MP4 audio stream because a stream can contain
+only silence.
+
+To generate narration with the operating system voice on macOS or Linux:
+
+```bash
+# First add the approved script to audio.narrationText.
+npm run video:narrate -- my-video.video.json
+```
+
+The command writes a local WAV under `public/generated/`, updates
+`audio.narrationSrc`, and scales automatic scene timings to the measured
+narration duration. The generated directory is ignored by Git.
+
+To use another local engine, set a command array without invoking a shell. The
+placeholders are replaced before the process starts:
+
+```bash
+export INSTAVAR_TTS_COMMAND_JSON='["/absolute/path/to/tts-wrapper","--text","{text}","--output","{output}"]'
+npm run video:narrate -- my-video.video.json --provider custom
+```
+
+This adapter can wrap Supertonic, Kokoro, Audio8, NeuTTS, or another local
+engine. Keep model weights and virtual environments outside this repository.
+
+The default recommendation is deliberately small:
+
+- Use the operating system voice for the fastest zero-download trial.
+- Use Supertonic when a compact CPU-first model matters. Our bounded local test
+  measured about 562 MB peak resident memory.
+- Consider Kokoro when its voice set fits the brief. Our bounded local test
+  measured about 1.69 GB peak resident memory.
+- Treat Audio8 as an optional quality experiment, not the default download. Its
+  checkpoint is about 2.4 GB, and short M2 runs used roughly 5.5 to 7 GB.
+- Treat NeuTTS as a legacy advanced adapter. Our prior environment and model
+  footprint was roughly 11 GB and required Python, model, codec, phonemizer,
+  and reference-voice setup.
+
+These measurements come from different prompts and runtimes. They establish
+local feasibility, not a quality ranking.
+
+After rendering, audio QA runs automatically. If the spec expects audio, the
+command fails when no audio stream exists or the measured peak is at or below
+-60 dB. Run the same check independently with:
+
+```bash
+npm run video:qa -- my-video.video.json out/my-video.mp4
 ```
 
 ## Templates
@@ -55,7 +111,21 @@ npm run video:scaffold -- proof-walkthrough "Why this equation works"
 - `social-remix`: caption-forward framing for an existing clip
 - `finance-brief`: comparisons, numeric highlights, caveats, and recommendation
 
-All five support `9:16`, `4:5`, and `1:1` output. The first public release intentionally uses a restrained shared visual system so the VideoSpec and agent workflow remain stable while more extracted template implementations are added.
+All five support `9:16`, `4:5`, and `1:1` output. The renderer now uses
+scene-specific editorial layouts instead of printing internal scene identifiers
+above a generic text block. `announcement-brief` supports hero, statement,
+mechanism, outcome, and guidance scenes with light, dark, and clinical palettes.
+
+The visual safeguards are defaults, not prompt suggestions:
+
+- internal scene kinds stay hidden
+- decorative eyebrow labels are omitted unless explicitly authored
+- all-caps and implementation labels produce diagnostics
+- long headlines and dense point lists produce diagnostics
+- four-scene videos with weak layout variety produce diagnostics
+- Fraunces carries display hierarchy and Inter carries body copy
+- every scene receives a preview frame before the final render
+- expected audio is checked for audible signal after rendering
 
 ## Privacy and keys
 
