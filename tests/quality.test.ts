@@ -76,4 +76,30 @@ describe("quality safeguards", () => {
     expect(issues.map((issue) => issue.code)).toContain("all-caps-headline");
     expect(issues.map((issue) => issue.code)).toContain("implementation-label");
   });
+
+  it("blocks a timing manifest that does not map one beat to every scene", () => {
+    const spec = VideoSpecSchema.parse({
+      ...base,
+      audio: {
+        mode: "narration",
+        narrationSrc: "public/generated/narration.wav",
+        narrationTiming: {
+          schemaVersion: "1.0",
+          source: "segmented-synthesis",
+          durationMs: 2000,
+          segments: [
+            { sceneId: "hero", startMs: 0, endMs: 2000, durationMs: 2000 },
+          ],
+        },
+      },
+    });
+    expect(evaluateSpec(spec)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          level: "error",
+          code: "narration-timing-scene-mismatch",
+        }),
+      ]),
+    );
+  });
 });

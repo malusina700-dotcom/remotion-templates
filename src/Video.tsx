@@ -15,7 +15,7 @@ import {
   useVideoConfig,
 } from "remotion";
 
-import type { VideoSpec } from "./schema";
+import { sceneDurationMs, type VideoSpec } from "./schema";
 
 const { fontFamily: displayFont } = loadFraunces("normal", {
   weights: ["500", "600", "700"],
@@ -746,7 +746,7 @@ export function TemplateVideo({ spec }: { spec: VideoSpec }) {
       {spec.scenes.map((scene) => {
         const frames = Math.max(
           1,
-          Math.round(((scene.timing?.durationMs ?? 3000) / 1000) * fps),
+          Math.round((sceneDurationMs(spec, scene) / 1000) * fps),
         );
         const from = cursor;
         cursor += frames;

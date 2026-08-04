@@ -68,6 +68,22 @@ The command writes a local WAV under `public/generated/`, updates
 `audio.narrationSrc`, and scales automatic scene timings to the measured
 narration duration. The generated directory is ignored by Git.
 
+For private Supertonic narration with exact scene boundaries, open
+`https://instavar.com/voice` and write one paragraph per scene. Download the
+WAV and timing manifest, place the WAV under `public/generated/`, then run:
+
+```bash
+npm run video:timing -- my-video.video.json \
+  --audio public/generated/narration.wav \
+  --manifest ~/Downloads/instavar-supertonic-f1.timing.json
+```
+
+The command maps narration beats to scenes in order, rejects a beat-count
+mismatch, records the measured timing in VideoSpec, and updates automatic scene
+durations. The script and generation stay on the user's device. No API key,
+hosted aligner, upload, or account is required. This provides scene-level sync,
+not word-level caption timing.
+
 To use another local engine, set a command array without invoking a shell. The
 placeholders are replaced before the process starts:
 

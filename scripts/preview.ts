@@ -2,6 +2,7 @@ import { mkdir } from "node:fs/promises";
 import path from "node:path";
 
 import { evaluateSpec } from "../src/quality";
+import { sceneDurationMs } from "../src/schema";
 import { loadSpec, runRemotion, writeProps } from "./shared";
 
 const { spec } = await loadSpec(process.argv[2]);
@@ -21,7 +22,7 @@ if (process.argv.includes("--studio")) {
   for (const [index, scene] of spec.scenes.entries()) {
     const frames = Math.max(
       1,
-      Math.round(((scene.timing?.durationMs ?? 3000) / 1000) * spec.target.fps),
+      Math.round((sceneDurationMs(spec, scene) / 1000) * spec.target.fps),
     );
     const midpoint = cursor + Math.floor(frames / 2);
     const output = path.join(

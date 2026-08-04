@@ -28,6 +28,64 @@ const scene = z.object({
     .optional(),
 });
 
+export const NarrationTimingManifestSchema = z
+  .object({
+    schemaVersion: z.literal("1.0"),
+    source: z.literal("segmented-synthesis"),
+    durationMs: z
+      .number()
+      .int()
+      .positive()
+      .max(20 * 60 * 1000),
+    segments: z
+      .array(
+        z.object({
+          sceneId: z.string().min(1).max(80),
+          startMs: z.number().int().nonnegative(),
+          endMs: z.number().int().positive(),
+          durationMs: z.number().int().positive(),
+        }),
+      )
+      .min(1)
+      .max(24),
+  })
+  .superRefine((manifest, context) => {
+    let previousEnd = 0;
+    const ids = new Set<string>();
+    manifest.segments.forEach((segment, index) => {
+      if (ids.has(segment.sceneId)) {
+        context.addIssue({
+          code: "custom",
+          path: ["segments", index, "sceneId"],
+          message: "Narration timing scene IDs must be unique.",
+        });
+      }
+      ids.add(segment.sceneId);
+      if (segment.startMs !== previousEnd) {
+        context.addIssue({
+          code: "custom",
+          path: ["segments", index, "startMs"],
+          message: "Narration timing segments must be contiguous.",
+        });
+      }
+      if (segment.durationMs !== segment.endMs - segment.startMs) {
+        context.addIssue({
+          code: "custom",
+          path: ["segments", index, "durationMs"],
+          message: "Narration timing duration must equal endMs minus startMs.",
+        });
+      }
+      previousEnd = segment.endMs;
+    });
+    if (previousEnd !== manifest.durationMs) {
+      context.addIssue({
+        code: "custom",
+        path: ["durationMs"],
+        message: "Narration timing duration must end with the final segment.",
+      });
+    }
+  });
+
 export const VideoSpecSchema = z.object({
   schemaVersion: z.literal("1.0"),
   id: z.string().regex(/^[a-z0-9][a-z0-9-]{2,80}$/),
@@ -63,6 +121,7 @@ export const VideoSpecSchema = z.object({
       mode: z.enum(["auto", "narration", "music", "silent"]).default("auto"),
       narrationText: z.string().optional(),
       narrationSrc: z.string().optional(),
+      narrationTiming: NarrationTimingManifestSchema.optional(),
       narrationVolume: z.number().min(0).max(1).default(1),
       musicSrc: z.string().optional(),
       musicVolume: z.number().min(0).max(1).default(0.16),
@@ -84,6 +143,19 @@ export const VideoSpecSchema = z.object({
 });
 
 export type VideoSpec = z.infer<typeof VideoSpecSchema>;
+export type NarrationTimingManifest = z.infer<
+  typeof NarrationTimingManifestSchema
+>;
+
+export function sceneDurationMs(
+  spec: VideoSpec,
+  scene: VideoSpec["scenes"][number],
+): number {
+  const timed = spec.audio.narrationTiming?.segments.find(
+    (segment) => segment.sceneId === scene.id,
+  );
+  return timed?.durationMs ?? scene.timing?.durationMs ?? 3000;
+}
 
 export function dimensions(aspect: VideoSpec["target"]["aspect"]) {
   if (aspect === "9:16") return { width: 1080, height: 1920 };
@@ -109,7 +181,7 @@ export function durationInFrames(spec: VideoSpec): number {
     );
   }
   const milliseconds = spec.scenes.reduce(
-    (sum, item) => sum + (item.timing?.durationMs ?? 3000),
+    (sum, item) => sum + sceneDurationMs(spec, item),
     0,
   );
   return Math.max(1, Math.round((milliseconds / 1000) * spec.target.fps));

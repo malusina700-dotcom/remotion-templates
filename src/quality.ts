@@ -46,6 +46,23 @@ export function evaluateSpec(spec: VideoSpec): QualityIssue[] {
         "Narration text exists without narrationSrc. Written narration is not audible until audio is generated or attached.",
     });
   }
+  if (spec.audio.narrationTiming) {
+    const sceneIds = spec.scenes.map((scene) => scene.id);
+    const timingIds = spec.audio.narrationTiming.segments.map(
+      (segment) => segment.sceneId,
+    );
+    if (
+      sceneIds.length !== timingIds.length ||
+      sceneIds.some((sceneId, index) => timingIds[index] !== sceneId)
+    ) {
+      issues.push({
+        level: "error",
+        code: "narration-timing-scene-mismatch",
+        message:
+          "Narration timing must contain exactly one ordered segment for every scene. Re-run video:timing with one narration paragraph per scene.",
+      });
+    }
+  }
   if (!audioExpected) {
     issues.push({
       level: "info",
