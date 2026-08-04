@@ -13,16 +13,22 @@
     "video:validate": "tsx scripts/validate.ts",
     "video:preview": "tsx scripts/preview.ts",
     "video:render": "tsx scripts/render.ts",
+    "video:narrate": "tsx scripts/narrate.ts",
+    "video:timing": "tsx scripts/apply-narration-timing.ts",
+    "video:qa": "tsx scripts/qa.ts",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@remotion/cli": "^4.0.339",
-    "remotion": "^4.0.339",
+    "@remotion/cli": "4.0.502",
+    "@remotion/google-fonts": "4.0.502",
+    "@remotion/layout-utils": "4.0.502",
+    "@remotion/media": "4.0.502",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "remotion": "4.0.502",
     "zod": "^4.3.6"
   },
   "devDependencies": {

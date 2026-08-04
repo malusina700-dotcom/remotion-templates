@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "1.0",
+  "id": "how-mometasone-relieves-allergic-rhinitis",
+  "templateFamily": "announcement-brief",
+  "meta": {
+    "title": "How mometasone relieves allergic rhinitis",
+    "tags": ["health-explainer", "editorial"]
+  },
+  "target": {
+    "aspect": "9:16",
+    "fps": 30,
+    "durationMode": "fixed",
+    "fixedDurationSec": 30
+  },
+  "style": {
+    "theme": "clinical",
+    "variant": "default",
+    "safeAreaProfile": "metaSafe",
+    "showSceneLabels": false
+  },
+  "audio": {
+    "mode": "silent",
+    "narrationVolume": 1,
+    "musicVolume": 0.12,
+    "ducking": true
+  },
+  "assets": {},
+  "scenes": [
+    {
+      "id": "hero",
+      "kind": "hero",
+      "content": {
+        "title": "How does mometasone relieve allergic rhinitis?",
+        "subtitle": "It targets inflammation inside the nose"
+      },
+      "timing": { "durationMs": 4000 }
+    },
+    {
+      "id": "trigger",
+      "kind": "statement",
+      "content": {
+        "title": "Allergens trigger inflammation",
+        "subtitle": "The lining inside the nose becomes swollen and irritated"
+      },
+      "timing": { "durationMs": 6000 }
+    },
+    {
+      "id": "mechanism",
+      "kind": "mechanism",
+      "content": {
+        "title": "Mometasone calms the inflammatory response",
+        "before": "Swollen lining",
+        "after": "Calmer lining"
+      },
+      "timing": { "durationMs": 7000 }
+    },
+    {
+      "id": "outcomes",
+      "kind": "points",
+      "content": {
+        "title": "As inflammation settles",
+        "points": [
+          "Less nasal congestion",
+          "Less sneezing and itching",
+          "Less runny nose"
+        ]
+      },
+      "timing": { "durationMs": 7000 }
+    },
+    {
+      "id": "guidance",
+      "kind": "cta",
+      "content": {
+        "line1": "Use regularly as directed",
+        "line2": "Relief is not always immediate"
+      },
+      "timing": { "durationMs": 6000 }
+    }
+  ]
+}

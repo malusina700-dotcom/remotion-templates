@@ -8,14 +8,83 @@ export const templateIds = [
   "finance-brief",
 ] as const;
 
+export const sceneKinds = [
+  "hero",
+  "statement",
+  "mechanism",
+  "points",
+  "equation",
+  "video-window",
+  "cta",
+  "custom",
+] as const;
+
 const scene = z.object({
   id: z.string().min(1),
-  kind: z.enum(["hero", "points", "equation", "video-window", "cta", "custom"]),
+  kind: z.enum(sceneKinds),
   content: z.record(z.string(), z.unknown()),
   timing: z
     .object({ durationMs: z.number().int().positive().optional() })
     .optional(),
 });
+
+export const NarrationTimingManifestSchema = z
+  .object({
+    schemaVersion: z.literal("1.0"),
+    source: z.literal("segmented-synthesis"),
+    durationMs: z
+      .number()
+      .int()
+      .positive()
+      .max(20 * 60 * 1000),
+    segments: z
+      .array(
+        z.object({
+          sceneId: z.string().min(1).max(80),
+          startMs: z.number().int().nonnegative(),
+          endMs: z.number().int().positive(),
+          durationMs: z.number().int().positive(),
+        }),
+      )
+      .min(1)
+      .max(24),
+  })
+  .superRefine((manifest, context) => {
+    let previousEnd = 0;
+    const ids = new Set<string>();
+    manifest.segments.forEach((segment, index) => {
+      if (ids.has(segment.sceneId)) {
+        context.addIssue({
+          code: "custom",
+          path: ["segments", index, "sceneId"],
+          message: "Narration timing scene IDs must be unique.",
+        });
+      }
+      ids.add(segment.sceneId);
+      if (segment.startMs !== previousEnd) {
+        context.addIssue({
+          code: "custom",
+          path: ["segments", index, "startMs"],
+          message: "Narration timing segments must be contiguous.",
+        });
+      }
+      if (segment.durationMs !== segment.endMs - segment.startMs) {
+        context.addIssue({
+          code: "custom",
+          path: ["segments", index, "durationMs"],
+          message: "Narration timing duration must equal endMs minus startMs.",
+        });
+      }
+      previousEnd = segment.endMs;
+    });
+    if (previousEnd !== manifest.durationMs) {
+      context.addIssue({
+        code: "custom",
+        path: ["durationMs"],
+        message: "Narration timing duration must end with the final segment.",
+      });
+    }
+  });
 
 export const VideoSpecSchema = z.object({
   schemaVersion: z.literal("1.0"),
@@ -34,22 +103,36 @@ export const VideoSpecSchema = z.object({
   }),
   style: z
     .object({
-      theme: z.string().default("default"),
+      theme: z
+        .enum(["default", "editorial-light", "editorial-dark", "clinical"])
+        .default("default"),
       variant: z.string().default("default"),
       safeAreaProfile: z.enum(["baseline", "metaSafe"]).default("baseline"),
+      showSceneLabels: z.boolean().default(false),
     })
     .default({
       theme: "default",
       variant: "default",
       safeAreaProfile: "baseline",
+      showSceneLabels: false,
     }),
   audio: z
     .object({
+      mode: z.enum(["auto", "narration", "music", "silent"]).default("auto"),
+      narrationText: z.string().optional(),
       narrationSrc: z.string().optional(),
+      narrationTiming: NarrationTimingManifestSchema.optional(),
+      narrationVolume: z.number().min(0).max(1).default(1),
       musicSrc: z.string().optional(),
+      musicVolume: z.number().min(0).max(1).default(0.16),
       ducking: z.boolean().default(true),
     })
-    .default({ ducking: true }),
+    .default({
+      mode: "auto",
+      narrationVolume: 1,
+      musicVolume: 0.16,
+      ducking: true,
+    }),
   assets: z
     .object({
       logoSrc: z.string().optional(),
@@ -60,6 +143,19 @@ export const VideoSpecSchema = z.object({
 });
 
 export type VideoSpec = z.infer<typeof VideoSpecSchema>;
+export type NarrationTimingManifest = z.infer<
+  typeof NarrationTimingManifestSchema
+>;
+
+export function sceneDurationMs(
+  spec: VideoSpec,
+  scene: VideoSpec["scenes"][number],
+): number {
+  const timed = spec.audio.narrationTiming?.segments.find(
+    (segment) => segment.sceneId === scene.id,
+  );
+  return timed?.durationMs ?? scene.timing?.durationMs ?? 3000;
+}
 
 export function dimensions(aspect: VideoSpec["target"]["aspect"]) {
   if (aspect === "9:16") return { width: 1080, height: 1920 };
@@ -85,8 +181,15 @@ export function durationInFrames(spec: VideoSpec): number {
     );
   }
   const milliseconds = spec.scenes.reduce(
-    (sum, item) => sum + (item.timing?.durationMs ?? 3000),
+    (sum, item) => sum + sceneDurationMs(spec, item),
     0,
   );
   return Math.max(1, Math.round((milliseconds / 1000) * spec.target.fps));
+}
+
+export function expectsAudibleAudio(spec: VideoSpec): boolean {
+  if (spec.audio.mode === "silent") return false;
+  if (spec.audio.mode === "narration") return true;
+  if (spec.audio.mode === "music") return true;
+  return Boolean(spec.audio.narrationSrc || spec.audio.musicSrc);
 }
