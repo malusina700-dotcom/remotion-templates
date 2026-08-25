@@ -1,6 +1,12 @@
-# Instavar Remotion Templates
+# Instavar Templates for Remotion
 
-Open-source, agent-friendly Remotion templates for turning a brief into a validated local video. The creative work happens in your Codex or Claude Code conversation. The Instavar MCP server supplies public template contracts, examples, and troubleshooting without requiring an Instavar account or API key.
+Independent, open-source Instavar templates for using Remotion to turn a brief
+into a validated local video. The creative work happens in your Codex or Claude
+Code conversation. The Instavar MCP server supplies public template contracts,
+examples, and troubleshooting without requiring an Instavar account or API key.
+
+Instavar is an independent project and is not affiliated with, sponsored by, or
+endorsed by Remotion AG. Remotion is a trademark of Remotion AG.
 
 [Open in Codex](codex://new?prompt=Clone%20https%3A%2F%2Fgithub.com%2Finstavar%2Fremotion-templates.git%20into%20a%20new%20local%20folder.%20Read%20AGENTS.md%20and%20.agents%2Fskills%2Fmake-video%2FSKILL.md.%20Add%20the%20public%20MCP%20server%20with%20codex%20mcp%20add%20instavar-remotion%20--url%20https%3A%2F%2Finstavar.com%2Fapi%2Fmcp%2Ftemplates.%20Then%20ask%20me%20for%20my%20video%20brief%2C%20choose%20a%20template%2C%20create%20a%20VideoSpec%2C%20validate%20it%2C%20preview%20it%2C%20and%20render%20the%20MP4%20locally.)
 
@@ -151,7 +157,7 @@ An Instavar API key unlocks the hosted Studio workflow, including managed render
 
 ## Licensing
 
-Instavar-authored code in this repository is MIT licensed. Remotion has its own license and terms. Review the [current Remotion license](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md) for your use case. See [TRADEMARKS.md](./TRADEMARKS.md) before using Instavar names or marks.
+Instavar-authored code in this repository is MIT licensed. Remotion has its own license and terms. Review the [current Remotion license](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md) for your use case. See [TRADEMARKS.md](./TRADEMARKS.md) for the independent-project notice and before using Instavar names or marks.
 
 ## Contributing and security
 

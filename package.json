@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "private": false,
   "type": "module",
-  "description": "Open-source, agent-friendly Remotion templates driven by a portable VideoSpec.",
+  "description": "Independent, open-source Instavar templates for Remotion driven by a portable VideoSpec.",
   "license": "MIT",
   "engines": {
     "node": ">=22"
