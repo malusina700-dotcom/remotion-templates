@@ -15,6 +15,7 @@ export const sceneKinds = [
   "points",
   "equation",
   "video-window",
+  "video-caption",
   "cta",
   "custom",
 ] as const;
@@ -137,8 +138,10 @@ export const VideoSpecSchema = z.object({
     .object({
       logoSrc: z.string().optional(),
       posterSrc: z.string().optional(),
+      backgroundVideoSrc: z.string().optional(),
+      backgroundVideoStartSec: z.number().min(0).default(0),
     })
-    .default({}),
+    .default({ backgroundVideoStartSec: 0 }),
   scenes: z.array(scene).min(1),
 });
 

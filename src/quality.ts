@@ -31,11 +31,16 @@ export function evaluateSpec(spec: VideoSpec): QualityIssue[] {
         "audio.mode is narration, but audio.narrationSrc is missing. Run video:narrate or add an existing audio file.",
     });
   }
-  if (spec.audio.mode === "music" && !spec.audio.musicSrc) {
+  if (
+    spec.audio.mode === "music" &&
+    !spec.audio.musicSrc &&
+    !spec.assets.backgroundVideoSrc
+  ) {
     issues.push({
       level: "error",
       code: "music-source-missing",
-      message: "audio.mode is music, but audio.musicSrc is missing.",
+      message:
+        "audio.mode is music, but neither audio.musicSrc nor assets.backgroundVideoSrc is set.",
     });
   }
   if (spec.audio.narrationText && !spec.audio.narrationSrc) {

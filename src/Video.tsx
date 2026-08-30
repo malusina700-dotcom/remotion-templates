@@ -667,6 +667,107 @@ function VideoWindow({
   );
 }
 
+function VideoCaption({ scene }: { scene: SceneSpec }) {
+  const frame = useCurrentFrame();
+  const { fps, width } = useVideoConfig();
+  const position = stringValue(scene.content.position, "center");
+  const title = stringValue(scene.content.title);
+  const subtitle = stringValue(scene.content.subtitle);
+  const progress = enter(frame, fps);
+  const textShadow = "0 2px 28px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.65)";
+
+  if (position === "corner") {
+    return (
+      <AbsoluteFill style={{ padding: "0 9% 8%", justifyContent: "flex-end" }}>
+        <div
+          style={{
+            opacity: progress * 0.88,
+            color: "#f6f6f4",
+            fontFamily: bodyFont,
+            fontWeight: 600,
+            fontSize: 26,
+            letterSpacing: 3,
+            textShadow,
+          }}
+        >
+          {title}
+        </div>
+      </AbsoluteFill>
+    );
+  }
+
+  const justifyContent =
+    position === "top"
+      ? "flex-start"
+      : position === "bottom"
+        ? "flex-end"
+        : "center";
+  const scrimGradient =
+    position === "top"
+      ? "linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.18) 62%, rgba(0,0,0,0) 100%)"
+      : position === "bottom"
+        ? "linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 62%, rgba(0,0,0,0) 100%)"
+        : "radial-gradient(ellipse at center, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0.12) 55%, rgba(0,0,0,0) 78%)";
+
+  return (
+    <AbsoluteFill>
+      <AbsoluteFill
+        style={{
+          background: scrimGradient,
+          height: position === "center" ? "100%" : "48%",
+          top: position === "bottom" ? undefined : 0,
+          bottom: position === "top" ? undefined : 0,
+        }}
+      />
+      <AbsoluteFill
+        style={{
+          padding: "14% 10%",
+          justifyContent,
+          alignItems: "center",
+          textAlign: "center",
+        }}
+      >
+        <div
+          style={{
+            opacity: progress,
+            transform: `translateY(${interpolate(progress, [0, 1], [22, 0])}px)`,
+          }}
+        >
+          <div
+            style={{
+              color: "#ffffff",
+              fontFamily: displayFont,
+              fontWeight: 600,
+              fontSize: headlineSize(title, width * 0.78, 96),
+              lineHeight: 1.14,
+              letterSpacing: -1,
+              whiteSpace: "pre-line",
+              textShadow,
+            }}
+          >
+            {title}
+          </div>
+          {subtitle ? (
+            <div
+              style={{
+                marginTop: 26,
+                color: "#f0f0ee",
+                fontFamily: bodyFont,
+                fontWeight: 500,
+                fontSize: 32,
+                letterSpacing: 1,
+                textShadow,
+              }}
+            >
+              {subtitle}
+            </div>
+          ) : null}
+        </div>
+      </AbsoluteFill>
+    </AbsoluteFill>
+  );
+}
+
 function Scene({
   scene,
   spec,
@@ -687,6 +788,8 @@ function Scene({
       <Equation scene={scene} palette={palette} />
     ) : scene.kind === "video-window" ? (
       <VideoWindow scene={scene} palette={palette} />
+    ) : scene.kind === "video-caption" ? (
+      <VideoCaption scene={scene} />
     ) : scene.kind === "cta" ? (
       <Cta scene={scene} palette={palette} />
     ) : (
@@ -694,7 +797,9 @@ function Scene({
     );
   return (
     <AbsoluteFill>
-      <Background palette={palette} />
+      {spec.assets.backgroundVideoSrc ? null : (
+        <Background palette={palette} />
+      )}
       {renderedScene}
       {spec.style.showSceneLabels ? (
         <div
@@ -737,12 +842,30 @@ function AudioBed({ spec }: { spec: VideoSpec }) {
   );
 }
 
+function BackgroundVideoLayer({ spec }: { spec: VideoSpec }) {
+  const { fps } = useVideoConfig();
+  const src = resolveAsset(spec.assets.backgroundVideoSrc);
+  if (!src) return null;
+  const trimBefore = Math.round(
+    (spec.assets.backgroundVideoStartSec ?? 0) * fps,
+  );
+  return (
+    <OffthreadVideo
+      src={src}
+      muted={false}
+      trimBefore={trimBefore}
+      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+    />
+  );
+}
+
 export function TemplateVideo({ spec }: { spec: VideoSpec }) {
   const palette = paletteFor(spec);
   const { fps } = useVideoConfig();
   let cursor = 0;
   return (
     <AbsoluteFill style={{ background: palette.background }}>
+      <BackgroundVideoLayer spec={spec} />
       {spec.scenes.map((scene) => {
         const frames = Math.max(
           1,

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "1.0",
+  "id": "yanati-ona-silnee",
+  "templateFamily": "social-remix",
+  "meta": {
+    "title": "YANATI — «Она сильнее» (test reel)",
+    "description": "Vertical 20s promo cut built from the finished YANATI music video, for Reels/TikTok/Shorts.",
+    "tags": ["yanati", "music-promo", "vertical", "test"]
+  },
+  "target": {
+    "aspect": "9:16",
+    "fps": 30,
+    "durationMode": "fixed",
+    "fixedDurationSec": 20
+  },
+  "style": {
+    "theme": "editorial-dark",
+    "variant": "default",
+    "safeAreaProfile": "metaSafe",
+    "showSceneLabels": false
+  },
+  "audio": {
+    "mode": "music",
+    "musicVolume": 1,
+    "ducking": false
+  },
+  "assets": {
+    "backgroundVideoSrc": "public/yanati-ona-silnee-source.mp4",
+    "backgroundVideoStartSec": 0
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "kind": "video-caption",
+      "content": {
+        "title": "Её не нужно спасать —\nона спасает сама",
+        "position": "center"
+      },
+      "timing": { "durationMs": 2000 }
+    },
+    {
+      "id": "performance",
+      "kind": "video-caption",
+      "content": {
+        "title": "YANATI",
+        "position": "corner"
+      },
+      "timing": { "durationMs": 15000 }
+    },
+    {
+      "id": "final-title",
+      "kind": "video-caption",
+      "content": {
+        "title": "YANATI",
+        "subtitle": "«Она сильнее»",
+        "position": "center"
+      },
+      "timing": { "durationMs": 3000 }
+    }
+  ]
+}
