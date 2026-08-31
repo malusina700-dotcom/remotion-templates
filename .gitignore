@@ -3,3 +3,10 @@ out/
 public/generated/
 .DS_Store
 *.log
+
+# Local source media for videos — keep creative assets local, do not push
+public/*.mp4
+public/*.mov
+public/*.wav
+public/*.mp3
+public/*.m4a

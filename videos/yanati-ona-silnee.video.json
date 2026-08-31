@@ -26,7 +26,7 @@
   },
   "assets": {
     "backgroundVideoSrc": "public/yanati-ona-silnee-source.mp4",
-    "backgroundVideoStartSec": 0
+    "backgroundVideoStartSec": 21
   },
   "scenes": [
     {
