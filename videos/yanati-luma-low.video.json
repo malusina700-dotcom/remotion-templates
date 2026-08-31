@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "id": "yanati-ona-silnee",
+  "id": "yanati-luma-low",
   "templateFamily": "social-remix",
   "meta": {
-    "title": "YANATI — «Она сильнее» (test reel)",
+    "title": "YANATI — «LUMA LOW» (test reel)",
     "description": "Vertical 20s promo cut built from the finished YANATI music video, for Reels/TikTok/Shorts.",
-    "tags": ["yanati", "music-promo", "vertical", "test"]
+    "tags": ["yanati", "luma-low", "music-promo", "vertical", "test"]
   },
   "target": {
     "aspect": "9:16",
@@ -25,7 +25,7 @@
     "ducking": false
   },
   "assets": {
-    "backgroundVideoSrc": "public/yanati-ona-silnee-source.mp4",
+    "backgroundVideoSrc": "public/yanati-luma-low-source.mp4",
     "backgroundVideoStartSec": 21
   },
   "scenes": [
@@ -33,7 +33,7 @@
       "id": "hook",
       "kind": "video-caption",
       "content": {
-        "title": "Её не нужно спасать —\nона спасает сама",
+        "title": "Я сейчас одна это увидела?",
         "position": "center"
       },
       "timing": { "durationMs": 2000 }
@@ -52,7 +52,7 @@
       "kind": "video-caption",
       "content": {
         "title": "YANATI",
-        "subtitle": "«Она сильнее»",
+        "subtitle": "«LUMA LOW»",
         "position": "center"
       },
       "timing": { "durationMs": 3000 }
